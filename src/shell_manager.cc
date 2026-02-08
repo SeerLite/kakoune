@@ -147,6 +147,8 @@ Vector<String> generate_env(StringView cmdline, ConstArrayView<String> params, c
     static const Regex re(R"(\bkak_(quoted_)?(\w+)\b)");
 
     Vector<String> env;
+    for (const auto& [key, value] : context.options()["env"].get<HashMap<String, String, MemoryDomain::Options>>())
+        env.push_back(format("{}={}", key, value));
     auto add_matches = [&](StringView s) {
         for (auto&& match : RegexIterator{s.begin(), s.end(), re})
         {
